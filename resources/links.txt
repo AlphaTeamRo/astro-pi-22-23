@@ -1,0 +1,3 @@
+GOOGLE MAPS: https://www.google.com/maps/place/15%C2%B015'17.8%22N+16%C2%B038'01.4%22W/@15.3748471,-16.4745835,542293a,35y,221.63h,0.78t/data=!3m1!1e3!4m5!3m4!1s0x0:0x19529811c25d6c80!8m2!3d15.254944!4d-16.633722
+
+ASTRO PI NDVI: https://projects.raspberrypi.org/en/projects/astropi-ndvi
