@@ -1,0 +1,7 @@
+__pycache__
+/raw/*.png
+/raw/*.jpg
+/ndvi.png
+/color_mapped_image.png
+/status.txt
+/pixelcount.py
