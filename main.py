@@ -25,7 +25,7 @@ def create_csv(data_file):
     with open(data_file, 'w') as f:
         try:
             writer = csv.writer(f)
-            header = ("Image", "Healthy", "Declining", "Unhealthy", "Location")
+            header = ("Image", "Healthy", "Declining", "Unhealthy", "Longitude", "Latitude", "O2 emissions", "ISS Temperature")
             writer.writerow(header)
         except:
             logger.error("Couldn't create a csv file")
@@ -99,14 +99,14 @@ def capture(camera, image):
 
     # Set the EXIF tags specifying the current location
     camera.exif_tags['GPS.GPSLatitude'] = exif_latitude
-    camera.exif_tags['GPS.GPSLatitudeRef'] = "S" if south else "N"
+    latref = camera.exif_tags['GPS.GPSLatitudeRef'] = "S" if south else "N"
     camera.exif_tags['GPS.GPSLongitude'] = exif_longitude
-    camera.exif_tags['GPS.GPSLongitudeRef'] = "W" if west else "E"
+    longref = camera.exif_tags['GPS.GPSLongitudeRef'] = "W" if west else "E"
 
     # Capture the image
     camera.capture(image)
 
-    return point
+    return point, latref, longref
 
 #function for increasing the contrast of the image
 def contrast_stretch(im):
@@ -155,7 +155,7 @@ while (now_time < project_start_time + timedelta(minutes=170)):
 
     #-----------------TAKE CAMERA PICTURE AND STORE IT IN image-----------------#
     image_file = f"{base_folder}/raw/{timestamp}.jpg"
-    location = capture(cam, image_file)
+    point, latref, longref = capture(cam, image_file)
 
     image = cv2.imread(image_file)
     #image = cv2.imread('park.png')
@@ -187,7 +187,13 @@ while (now_time < project_start_time + timedelta(minutes=170)):
     logger.info("Declining: " + str(declining))
     logger.info("Unhealthy: " + str(unhealthy))
 
-    row = (timestamp, str(healthy), str(declining), str(unhealthy), str(location))
+    longitude = str(point.longitude).replace("deg", "°").replace("-", "") + longref
+    latitude = str(point.latitude).replace("deg", "°").replace("-", "") + latref
+
+    logger.info("Longitude: "+ longitude)
+    logger.info("Latitude: " + latitude)
+
+    row = (timestamp, str(healthy), str(declining), str(unhealthy), str(longitude), str(latitude))
     add_csv_data(data_file, row)
 
 

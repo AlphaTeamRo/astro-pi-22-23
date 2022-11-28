@@ -1,0 +1,9 @@
+One acre of trees pruduces about 260 pounds of oxygen each year
+0.00404686 km2 = 117.934kg oxygen /year
+The area seen in the resources/scale_images/2022-04-30_11-54-26.jpg is aprox. 80 000km2
+Primitive measurements (taped the image to the screen and traced it on google earth)
+can be found in resources/scale_images/image_area.png
+
+0.00404686 km2 produces 118kg oxygen a year
+1 km2 produces 29158.435013126kg oxygen a year
+80000 km2 produces 2332674801.0500848kg oxygen a year
