@@ -172,7 +172,7 @@ while (now_time < project_start_time + timedelta(minutes=170)):
     color_mapped_image = cv2.applyColorMap(color_mapped_prep, fastiecm)
     cv2.imwrite('color_mapped_image.png', color_mapped_image)
 
-    counts = pixelcount('color_mapped_image.png', logger)
+    counts = pixelcount('color_mapped_image.png')
 
     #calculate the heath index
     #green = healthy

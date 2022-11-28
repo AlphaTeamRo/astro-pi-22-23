@@ -6,3 +6,5 @@ __pycache__
 /status.txt
 /pixelcount.py
 /timecmd.bat
+events.log
+data.csv
