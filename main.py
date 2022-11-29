@@ -15,6 +15,8 @@ import re
 import os
 import csv
 from logzero import logger, logfile
+from gpiozero import CPUTemperature
+from sense_hat import SenseHat
 
 project_start_time = datetime.now()
 
@@ -25,7 +27,7 @@ def create_csv(data_file):
     with open(data_file, 'w') as f:
         try:
             writer = csv.writer(f)
-            header = ("Image", "Healthy", "Declining", "Unhealthy", "Longitude", "Latitude", "O2 emissions", "ISS Temperature")
+            header = ("Image", "Healthy", "Declining", "Unhealthy", "Longitude", "Latitude", "O2 emissions", "ISS Temperature", "CPU Temperature", "ISS Humidity")
             writer.writerow(header)
         except:
             logger.error("Couldn't create a csv file")
@@ -145,6 +147,9 @@ except:
 cam = PiCamera()
 cam.resolution = (1296,972)
 
+cpu = CPUTemperature()
+sense = SenseHat()
+
 now_time = datetime.now()
 while (now_time < project_start_time + timedelta(minutes=170)):
 
@@ -193,7 +198,11 @@ while (now_time < project_start_time + timedelta(minutes=170)):
     logger.info("Longitude: "+ longitude)
     logger.info("Latitude: " + latitude)
 
-    row = (timestamp, str(healthy), str(declining), str(unhealthy), str(longitude), str(latitude))
+    o2 = "not yet"
+    iss_temp = sense.get_temperature()
+    iss_humidity = sense.get_humidity()
+
+    row = (timestamp, str(healthy), str(declining), str(unhealthy), str(longitude), str(latitude), str(o2), str(iss_temp), str(cpu.temperature), str(iss_humidity))
     add_csv_data(data_file, row)
 
 
