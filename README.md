@@ -5,7 +5,7 @@ Needs python <3.10 as 3.11 does not support cv2
 
 
 
-Create the images as per folder_structure.txt
+Create the directory structure as per folder_structure.txt
 
 
 
