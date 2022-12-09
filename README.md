@@ -6,6 +6,7 @@ Needs python <3.10 as 3.11 does not support cv2
 
 
 Create the directory structure as per folder_structure.txt
+(Already done). Make sure to delete .gitkeep files from all empty directories
 
 
 
