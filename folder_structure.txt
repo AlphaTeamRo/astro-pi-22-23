@@ -1,3 +1,4 @@
 images/ - used to store the raw images
 processed/ - used to store the NDVI images
 masked/ - used to store the NDVI images with the window mask applied
+auto-classify/ - folder where the images will be classified
