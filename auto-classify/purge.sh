@@ -3,4 +3,4 @@
 
 rm -rf /home/astropi/msl/alpha/main-t1/auto-classify/day/*.jpg
 rm -rf /home/astropi/msl/alpha/main-t1/auto-classify/night/*.jpg
-rm -rf /home/astropi/msl/alpha/main-t1/auto-classify/twilight/8.jpg
+rm -rf /home/astropi/msl/alpha/main-t1/auto-classify/twilight/*.jpg
