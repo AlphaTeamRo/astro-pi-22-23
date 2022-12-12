@@ -1,0 +1,8 @@
+*__pycache__*
+data.csv
+events.log
+raw/*
+images
+auto-classify/day/*
+auto-classify/night/*
+auto-classify/twilight/*
