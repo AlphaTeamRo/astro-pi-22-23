@@ -1,3 +1,7 @@
+
+#TODO: Before submitting, remove auto-classify/purge.sh
+#TODO: Write the creddits comment at the top of the file
+
 import cv2
 from pathlib import Path
 from PIL import Image
