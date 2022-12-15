@@ -130,6 +130,7 @@ while (now_time < project_start_time + timedelta(minutes=170)):
 		cl = labels.get(c.id, c.id)
 		logger.info(f'{image_file} {labels.get(c.id, c.id)} {c.score:.5f}')
 		
+		# move the image to the appropriate folder and count its type
 		if cl == "night":
 			night_c = night_c+1
 			shutil.move(image_file, f"{base_folder}/auto-classify/night/")
@@ -144,6 +145,7 @@ while (now_time < project_start_time + timedelta(minutes=170)):
 	longitude = str(point.longitude).replace("deg", "°").replace("-", "") + longref
 	latitude = str(point.latitude).replace("deg", "°").replace("-", "") + latref
 
+	# log to logfile
 	logger.info("Longitude: "+ longitude)
 	logger.info("Latitude: " + latitude)
 
@@ -151,15 +153,19 @@ while (now_time < project_start_time + timedelta(minutes=170)):
 	iss_humidity = sense.get_humidity()
 	type = cl
 
+	# write the csv row
 	row = (timestamp, str(type), str(longitude), str(latitude), str(iss_temp), str(cpu.temperature), str(iss_humidity))
 	add_csv_data(data_file, row)
 	sleep(5)
+
+	# add a line to the logfile so we can distinguish each run
+	logger.debug("--------------------------------------------------")
 
 	try:
 		now_time = datetime.now()
 	except:
 		logger.error("Couldn't update the time")
 
-print("Day: " + str(day_c))
-print("Night: " + str(night_c))
-print("Twilight: " + str(tw_c))
+logger.debug("Day: " + str(day_c))
+logger.debug("Night: " + str(night_c))
+logger.debug("Twilight: " + str(tw_c))
