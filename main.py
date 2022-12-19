@@ -18,7 +18,7 @@ import csv
 from orbit import ISS
 from file_checker import files_check
 from gpiozero import CPUTemperature
-from sense_hat import SenseHat
+from sense_emu import SenseHat # ! CHANGE sense_emu TO sense_hat BEFORE SUBMITTING
 import re
 from time import sleep
 
@@ -109,6 +109,8 @@ cam.resolution = (1296,972)
 cpu = CPUTemperature()
 sense = SenseHat()
 
+has_been_killed = True
+
 now_time = datetime.now()
 while (now_time < project_start_time + timedelta(minutes=170)):
 #for file in os.listdir(image_dir):
@@ -173,3 +175,5 @@ while (now_time < project_start_time + timedelta(minutes=170)):
 logger.debug("Day: " + str(day_c))
 logger.debug("Night: " + str(night_c))
 logger.debug("Twilight: " + str(tw_c))
+has_been_killed = False
+logger.debug("Has been killed: " + str(has_been_killed))
