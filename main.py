@@ -1,6 +1,10 @@
 
 #TODO: Before submitting, remove auto-classify/purge.sh
-#TODO: Write the creddits comment at the top of the file
+#TODO: Write the credits comment at the top of the file
+#TODO: See how much space each run takes, set the delay so we gather as much data as possible whilst also keeping it under 3 GB
+
+# This only classifies images into night/twilight/day, embeds the corresponding EXIF, and writes data to "data.csv".
+# Our goal with this is to capture as much data as possible. We will process NDVI and O2 emissions back on Earth.
 
 import cv2
 from pathlib import Path
@@ -152,8 +156,8 @@ while (now_time < project_start_time + timedelta(minutes=170)):
 	latitude = str(point.latitude).replace("deg", "°").replace("-", "") + latref
 
 	# log to logfile
-	logger.info("Longitude: "+ longitude)
-	logger.info("Latitude: " + latitude)
+	logger.info("Longitude: " + longitude)
+	logger.info("Latitude: "  + latitude)
 
 	iss_temp = sense.get_temperature()
 	iss_humidity = sense.get_humidity()
