@@ -95,7 +95,7 @@ size = common.input_size(interpreter)
 
 create_csv(data_file)
 logfile(f'{base_folder}/events.log')
-print("Hello from Romania !")
+logger.debug("Hello from Romania !")
 files_check(logger, base_folder)
 
 try:
