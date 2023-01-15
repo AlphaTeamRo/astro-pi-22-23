@@ -40,7 +40,7 @@ def create_csv(data_file):
     with open(data_file, 'w') as f:
         try:
             writer = csv.writer(f)
-            header = ("Image", "Type", "Longitude", "Latitude", "ISS Temperature", "CPU Temperature", "ISS Humidity")
+            header = ("Image", "Type", "Longitude", "Latitude", "ISS Temperature", "CPU Temperature", "ISS Humidity", "ISS Pressure")
             writer.writerow(header)
         except:
             logger.error("Couldn't create a csv file")
@@ -161,10 +161,11 @@ while (now_time < project_start_time + timedelta(minutes=170)):
 
 	iss_temp = sense.get_temperature()
 	iss_humidity = sense.get_humidity()
+	iss_pressure = sense.get_pressure()
 	type = cl
 
 	# write the csv row
-	row = (timestamp, str(type), str(longitude), str(latitude), str(iss_temp), str(cpu.temperature), str(iss_humidity))
+	row = (timestamp, str(type), str(longitude), str(latitude), str(iss_temp), str(cpu.temperature), str(iss_humidity), str(iss_pressure))
 	add_csv_data(data_file, row)
 	sleep(5)
 
