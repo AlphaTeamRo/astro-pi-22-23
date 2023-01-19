@@ -22,7 +22,7 @@ import csv
 from orbit import ISS
 from file_checker import files_check
 from gpiozero import CPUTemperature
-from sense_emu import SenseHat # ! CHANGE sense_emu TO sense_hat BEFORE SUBMITTING
+from sense_hat import SenseHat # ! CHANGE sense_emu TO sense_hat BEFORE SUBMITTING
 import re
 from time import sleep
 
@@ -34,8 +34,9 @@ model_file = f'{base_folder}/model_v1/model_edgetpu.tflite' # name of model
 label_file = f'{base_folder}/model_v1/labels.txt' # Name of your label file
 img_dir = f'{base_folder}/raw'
 data_file = f'{base_folder}/data.csv'
+position_file = f'{base_folder}/position.csv'
 
-# Functions for creating and appending data in a CSV file
+# Functions for creating and appending data in the main CSV file
 def create_csv(data_file):
     with open(data_file, 'w') as f:
         try:
@@ -47,6 +48,24 @@ def create_csv(data_file):
 
 def add_csv_data(data_file, data):
     with open(data_file, 'a') as f:
+        try:
+            writer = csv.writer(f)
+            writer.writerow(data)
+        except:
+            logger.error("Couldn't add csv data")
+
+# Functions for creating and appending data in the position CSV file
+def create_position_file(position_file):
+    with open(position_file, 'w') as f:
+        try:
+            writer = csv.writer(f)
+            header = ("Yaw", "Pitch", "Roll", "Compass-X", "Compass-Y", "Compass-Z", "Acc-X", "Acc-Y", "Acc-Z", "Gyro-X", "Gyro-Y", "Gyro-Z")
+            writer.writerow(header)
+        except:
+            logger.error("Couldn't create a csv file")
+
+def add_csv_position(position_file, data):
+    with open(position_file, 'a') as f:
         try:
             writer = csv.writer(f)
             writer.writerow(data)
@@ -94,6 +113,7 @@ interpreter.allocate_tensors()
 size = common.input_size(interpreter)
 
 create_csv(data_file)
+create_position_file(position_file)
 logfile(f'{base_folder}/events.log')
 logger.debug("Hello from Romania !")
 files_check(logger, base_folder)
@@ -159,6 +179,7 @@ while (now_time < project_start_time + timedelta(minutes=170)):
 	logger.info("Longitude: " + longitude)
 	logger.info("Latitude: "  + latitude)
 
+	# Get environment data
 	iss_temp = sense.get_temperature()
 	iss_humidity = sense.get_humidity()
 	iss_pressure = sense.get_pressure()
@@ -167,6 +188,16 @@ while (now_time < project_start_time + timedelta(minutes=170)):
 	# write the csv row
 	row = (timestamp, str(type), str(longitude), str(latitude), str(iss_temp), str(cpu.temperature), str(iss_humidity), str(iss_pressure))
 	add_csv_data(data_file, row)
+
+	# Get position data
+	orientation = sense.get_orientation()
+	mag = sense.get_compass_raw()
+	acc = sense.get_accelerometer_raw()
+	gyro = sense.get_gyroscope_raw()
+
+	# Log position data
+	pos_row = (str(orientation["yaw"]), str(orientation["pitch"]), str(orientation["roll"]), str(mag["x"]), str(mag["y"]), str(mag["z"]), str(acc["x"]), str(acc["y"]), str(acc["z"]), str(gyro["x"]), str(gyro["y"]), str(gyro["z"]))
+	add_csv_position(position_file, pos_row)
 	sleep(5)
 
 	# add a line to the logfile so we can distinguish each run

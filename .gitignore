@@ -6,3 +6,4 @@ images
 auto-classify/day/*
 auto-classify/night/*
 auto-classify/twilight/*
+position.csv

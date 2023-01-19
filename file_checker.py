@@ -20,15 +20,6 @@ def files_check(logger, base_folder):
         except:
             logger.error("There was no events.log file and I couldn\'t make one")
     
-    if os.path.exists(f"{base_folder}/data.csv"):
-        pass
-    else:
-        try:
-            logger.error("There was no data.csv file, so I made one")
-            open(f"{base_folder}/data.csv", 'a').close()
-        except:
-            logger.error("There was no data.csv file and I couldn\'t make one")
-    
     #check if auto-classify exists
     if os.path.exists(f"{base_folder}/auto-classify"):
         #check if subfolders exist
