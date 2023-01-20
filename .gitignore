@@ -3,3 +3,6 @@ __pycache__
 images
 processed
 masked
+/auto-classify
+/images_masked
+/images_ndvi
