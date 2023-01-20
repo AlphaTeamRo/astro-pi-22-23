@@ -1,0 +1,13 @@
+Ce face:
+>Face poza near-infrared, o numeste cu data, ora si secunda
+>O clasifica in 'day', 'night' si 'twilight'
+>Logheaza lat/long in 'data.csv' si logzero logfile
+>Logheaza temp, umiditate si presiune in 'data.csv'
+>Logheaza position(orientation, mag, acc, gyro, elevation) in 'position.csv'
+
+Ce va trebui facut in post:
+>Procesarea NDVI
+>ALinierea imaginilor ca sa nu se suprapuna
+>Calcularea suprafetei fotografiate
+>Calcularea vegetatiei(culorilor NDVI) si posibil a oxigenului degajat
+>(Optional): Crearea graficelor bazandu-ne pe datele din CSV-uri (https://projects.raspberrypi.org/en/projects/astro-pi-flight-data-analysis/3)
