@@ -1,6 +1,29 @@
+"""
+------------------------------------------------------------------------------------------------------------------
+A project made by the Romanian team "Alpha Robotics Team" Târgoviște for the Astro PI 2022-2023 challenge
+
+Our project uses NDVI imaging for conducting a plant coverage index in relation to dry land.
+Credit to all our team members, friends, and families who supported us.
+
+Honorable mentions:
+-The Astro-PI team members:
+>Cristian Mihai
+>Mihai Theodor
+>Ionescu Constantin
+>Dragomir Isabela
+
+-Out Mentor:
+>Ghițeanu Ion
+
+-Other members of our robotics team:
+>Băluțoiu Bogdan
+>Dragomir Alexandru
+>Zaharia Matei
+------------------------------------------------------------------------------------------------------------------
+"""
+
 
 #TODO: Before submitting, remove auto-classify/purge.sh
-#TODO: Write the credits comment at the top of the file
 #TODO: See how much space each run takes, set the delay so we gather as much data as possible whilst also keeping it under 3 GB
 
 # This only classifies images into night/twilight/day, embeds the corresponding EXIF, and writes data to CSV files.
