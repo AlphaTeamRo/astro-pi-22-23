@@ -61,74 +61,74 @@ position_file = f'{base_folder}/position.csv'
 
 # Functions for creating and appending data in the main CSV file
 def create_csv(data_file):
-    with open(data_file, 'w') as f:
-        try:
-            writer = csv.writer(f)
-            header = ("Image", "Type", "Longitude", "Latitude", "ISS Temperature", "CPU Temperature", "ISS Humidity", "ISS Pressure")
-            writer.writerow(header)
-        except:
-            logger.error("Couldn't create a csv file")
+	with open(data_file, 'w') as f:
+		try:
+			writer = csv.writer(f)
+			header = ("Image", "Type", "Longitude", "Latitude", "ISS Temperature", "CPU Temperature", "ISS Humidity", "ISS Pressure")
+			writer.writerow(header)
+		except:
+			logger.error("Couldn't create a csv file")
 
 def add_csv_data(data_file, data):
-    with open(data_file, 'a') as f:
-        try:
-            writer = csv.writer(f)
-            writer.writerow(data)
-        except:
-            logger.error("Couldn't add csv data")
+	with open(data_file, 'a') as f:
+		try:
+			writer = csv.writer(f)
+			writer.writerow(data)
+		except:
+			logger.error("Couldn't add csv data")
 
 # Functions for creating and appending data in the position CSV file
 def create_position_file(position_file):
-    with open(position_file, 'w') as f:
-        try:
-            writer = csv.writer(f)
-            header = ("Yaw", "Pitch", "Roll", "Compass-X", "Compass-Y", "Compass-Z", "Acc-X", "Acc-Y", "Acc-Z", "Gyro-X", "Gyro-Y", "Gyro-Z", "Elevation")
-            writer.writerow(header)
-        except:
-            logger.error("Couldn't create a csv file")
+	with open(position_file, 'w') as f:
+		try:
+			writer = csv.writer(f)
+			header = ("Yaw", "Pitch", "Roll", "Compass-X", "Compass-Y", "Compass-Z", "Acc-X", "Acc-Y", "Acc-Z", "Gyro-X", "Gyro-Y", "Gyro-Z", "Elevation")
+			writer.writerow(header)
+		except:
+			logger.error("Couldn't create a csv file")
 
 def add_csv_position(position_file, data):
-    with open(position_file, 'a') as f:
-        try:
-            writer = csv.writer(f)
-            writer.writerow(data)
-        except:
-            logger.error("Couldn't add csv data")
+	with open(position_file, 'a') as f:
+		try:
+			writer = csv.writer(f)
+			writer.writerow(data)
+		except:
+			logger.error("Couldn't add csv data")
 
 # Function to convert raw coord. data into rationals
 
 def convert(angle):
-    """
-    Convert a `skyfield` Angle to an EXIF-appropriate
-    representation (rationals)
-    e.g. 98° 34' 58.7 to "98/1,34/1,587/10"
-    """
-    try:
-        sign, degrees, minutes, seconds = angle.signed_dms()
-        exif_angle = f'{degrees:.0f}/1,{minutes:.0f}/1,{seconds*10:.0f}/10'
-        return sign < 0, exif_angle
-    except:
-        logger.error("Couldn't convert skyfiled angle to EXIF")
+	"""
+	Convert a `skyfield` Angle to an EXIF-appropriate
+	representation (rationals)
+	e.g. 98° 34' 58.7 to "98/1,34/1,587/10"
+	"""
+	try:
+		sign, degrees, minutes, seconds = angle.signed_dms()
+		exif_angle = f'{degrees:.0f}/1,{minutes:.0f}/1,{seconds*10:.0f}/10'
+		return sign < 0, exif_angle
+	except:
+		logger.error("Couldn't convert skyfiled angle to EXIF")
 
 # Function to capture an image and embed it with the rationals converted above
 def capture(camera, image):
-    """Use `camera` to capture an `image` file with lat/long EXIF data."""
-    point = ISS.coordinates()
+	"""Use `camera` to capture an `image` file with lat/long EXIF data."""
+	point = ISS.coordinates()
 
-    # Convert the latitude and longitude to EXIF-appropriate representations
-    south, exif_latitude = convert(point.latitude)
-    west, exif_longitude = convert(point.longitude)
+	# Convert the latitude and longitude to EXIF-appropriate representations
+	south, exif_latitude = convert(point.latitude)
+	west, exif_longitude = convert(point.longitude)
 
-    # Set the EXIF tags specifying the current location
-    camera.exif_tags['GPS.GPSLatitude'] = exif_latitude
-    latref = camera.exif_tags['GPS.GPSLatitudeRef'] = "S" if south else "N"
-    camera.exif_tags['GPS.GPSLongitude'] = exif_longitude
-    longref = camera.exif_tags['GPS.GPSLongitudeRef'] = "W" if west else "E"
+	# Set the EXIF tags specifying the current location
+	camera.exif_tags['GPS.GPSLatitude'] = exif_latitude
+	latref = camera.exif_tags['GPS.GPSLatitudeRef'] = "S" if south else "N"
+	camera.exif_tags['GPS.GPSLongitude'] = exif_longitude
+	longref = camera.exif_tags['GPS.GPSLongitudeRef'] = "W" if west else "E"
 
-    # Capture the image
-    camera.capture(image)
+	# Capture the image
+	camera.capture(image)
 
-    return point, latref, longref
+	return point, latref, longref
 
 interpreter = make_interpreter(f"{model_file}")
 interpreter.allocate_tensors()
@@ -142,9 +142,9 @@ logger.debug("Hello from Romania !")
 files_check(logger, base_folder)
 
 try:
-    logger.info(f"I run in {str(base_folder)}")
+	logger.info(f"I run in {str(base_folder)}")
 except:
-    logger.error("Couldn\'t log the file location")
+	logger.error("Couldn\'t log the file location")
 
 day_c = 0
 night_c = 0
