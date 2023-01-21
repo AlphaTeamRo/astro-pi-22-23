@@ -35,7 +35,7 @@ def pixelcount(img):
     #cv2.imwrite('ndvi.png', img)
     img = Image.open(img)
     #borrow a list of named colors from matplotlib
-    use_colors = {k: colors.cnames[k] for k in ['red', 'green', 'yellow', 'purple']}
+    use_colors = {k: colors.cnames[k] for k in ['red', 'green', 'yellow', 'purple', 'gray', 'black']}
 
     #translate hexstring to RGB tuple
     named_colors = {k: tuple(map(int, (v[1:3], v[3:5], v[5:7]), 3*(16,)))
@@ -65,6 +65,12 @@ def pixelcount(img):
     counts = dict(zip(color_names, np.bincount(idx.ravel(), None, ncol+1)))
 
     print(counts)
+
+    import pylab
+
+    pylab.clf()
+    pylab.imshow(color_tuples[idx])
+    pylab.savefig(f'{base_folder}/testtt.png')
     
 
     return counts

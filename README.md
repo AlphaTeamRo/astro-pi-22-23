@@ -22,9 +22,11 @@ Needs python <3.10 as 3.11 does not support cv2
     cd ..
     ```
 
-3. Add image mask
+3. Add image mask (transparent should be used for panoramas, BLUE for pixelcount. TODO)
     ```
     cd 2-mask
     python3 add_mask.py
     cd ..
     ```
+
+3. Pixel count(must be run on Flight OS)
