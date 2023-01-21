@@ -21,7 +21,7 @@ for dir in os.listdir(img_folder):
         #iterate through all images in the folder
         print(f"{base_folder}/images_ndvi/" + dir)
         for image_file in os.listdir(f"{base_folder}/images_ndvi/" + dir):
-            print("AAAA" + image_file)
+            print("Masking: " + image_file)
             image = Image.open(f"{base_folder}/images_ndvi/" + dir + "/" + image_file)
             image.putalpha(mask)
             image.save(f"{base_folder}/images_masked/" + dir + "/" + image_file[:-5] + ".png") 
