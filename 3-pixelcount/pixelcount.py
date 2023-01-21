@@ -35,7 +35,7 @@ def pixelcount(img):
     #cv2.imwrite('ndvi.png', img)
     img = Image.open(img)
     #borrow a list of named colors from matplotlib
-    use_colors = {k: colors.cnames[k] for k in ['red', 'green', 'yellow', 'purple', 'gray', 'black']}
+    use_colors = {k: colors.cnames[k] for k in ['red', 'green', 'yellow', 'purple', 'gray', 'black', 'blue']}
 
     #translate hexstring to RGB tuple
     named_colors = {k: tuple(map(int, (v[1:3], v[3:5], v[5:7]), 3*(16,)))
@@ -83,15 +83,26 @@ for image in os.listdir(img_folder):
     print(f"{base_folder}/images_masked/day/" + image)
     counts = pixelcount(f"{base_folder}/images_masked/day/" + image)
 
-    #calculate the heath index
+    all_vegetation_px = counts["red"] + counts["green"] + counts["yellow"]
+
+    # Calculate what % of the image is occupied by plants(no matter their health condition)
+    all_image_px = counts["red"] + counts["green"] + counts["yellow"] + counts["gray"] + counts["black"] #blue is the mask, it will be ignored
+
+    # Calculate how much of the image is occupied by plants
+    plant_px_percentage = round((all_vegetation_px / all_image_px) * 100)
+    print("Total plant precentage: " + str(plant_px_percentage) + "%")
+
+
+    #calculate the heath index. (What % of plants are what)
     #green = healthy
     #yellow = declining
     #red = unhealthy
-    allcounts = counts["red"] + counts["green"] + counts["yellow"]
-    healthy = round((counts["green"] / allcounts) * 100)
-    declining = round((counts["yellow"] / allcounts) * 100)
-    unhealthy = round((counts["red"] / allcounts) * 100)
+    healthy = round((counts["green"] / all_vegetation_px) * 100)
+    declining = round((counts["yellow"] / all_vegetation_px) * 100)
+    unhealthy = round((counts["red"] / all_vegetation_px) * 100)
 
+    # TODO: We have the health index(healthy, declining, unhealthy) and the plant percentage(plant_px_percentage). Now we need to calculate the o2 emissions. One pixel is equal to ~200m^2
+    # *: 36% din toata imaginea sunt plante, din alea 36%, 50% sunt sanatoase, 25% sunt in declin si 10% sunt bolnave. => din imaginea totala, 18% sunt sanatoase, 9% sunt in declin si 4% sunt bolnave. calculeaza o2 ca mai jos. *ms copilot
     #o2 emissions may not be calculated correctly, this is just what copilot suggested
     o2 = round((healthy * 0.5) + (declining * 0.25) + (unhealthy * 0.1))
 
