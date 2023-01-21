@@ -1,3 +1,4 @@
+# Credit: https://stackoverflow.com/questions/65523727/python-image-masking-and-removing-background
 import os
 from PIL import Image
 from pathlib import Path
@@ -7,6 +8,8 @@ print("Working in: " + str(base_folder))
 img_folder = f'{base_folder}/images_ndvi'
 
 mask = Image.open("test_mask.png")
+# convert images
+mask = mask.convert('L')    # grayscale
 
 for dir in os.listdir(img_folder):
     #check if the file is a folder
@@ -20,5 +23,5 @@ for dir in os.listdir(img_folder):
         for image_file in os.listdir(f"{base_folder}/images_ndvi/" + dir):
             print("AAAA" + image_file)
             image = Image.open(f"{base_folder}/images_ndvi/" + dir + "/" + image_file)
-            image.paste(mask, (0, 0), mask)
-            image.save(f"{base_folder}/images_masked/" + dir + "/" + image_file) 
+            image.putalpha(mask)
+            image.save(f"{base_folder}/images_masked/" + dir + "/" + image_file[:-5] + ".png") 
