@@ -87,29 +87,36 @@ for image in os.listdir(img_folder):
 
     green = counts["green"] + counts["lime"] + counts["limegreen"]
     yellow = counts["yellow"] + counts["orange"]
-
-    all_vegetation_px = counts["red"] + green + yellow
-
-    # Calculate what % of the image is occupied by plants(no matter their health condition)
-    all_image_px = counts["red"] + green + yellow + counts["gray"] + counts["black"] #blue is the mask, it will be ignored
+    red = counts["red"]
+    none = counts["gray"] + counts["black"]
 
     # Calculate how much of the image is occupied by plants
-    plant_px_percentage = round((all_vegetation_px / all_image_px) * 100)
-    print("Total plant precentage: " + str(plant_px_percentage) + "%")
+    total_plants = red + green + yellow
+    # Calculate what % of the image is occupied by plants(no matter their health condition)
+    total = red + green + yellow + none #blue is the mask, it will be ignored
 
-
+    
+    all_image_px = counts["red"] + green + yellow + counts["gray"] + counts["black"] #blue is the mask, it will be ignored
+    
     #calculate the heath index. (What % of plants are what)
     #green = healthy
     #yellow = declining
     #red = unhealthy
-    healthy = round((green / all_vegetation_px) * 100)
-    declining = round((yellow / all_vegetation_px) * 100)
-    unhealthy = round((counts["red"] / all_vegetation_px) * 100)
+    healty_perc = round(green / total * 10000) / 100
+    declining_perc = round(yellow / total * 10000) / 100
+    unhealty_perc = round(red / total * 10000) / 100
+    none_perc = round(none / total * 10000) / 100
+    #print
+    print("Healthy: " + str(healty_perc) + "%")
+    print("Declining: " + str(declining_perc) + "%")
+    print("Unhealthy: " + str(unhealty_perc) + "%")
+    print("None: " + str(none_perc) + "%")
+    
 
-    # TODO: We have the health index(healthy, declining, unhealthy) and the plant percentage(plant_px_percentage). Now we need to calculate the o2 emissions. One pixel is equal to ~200m^2
-    # *: 36% din toata imaginea sunt plante, din alea 36%, 50% sunt sanatoase, 25% sunt in declin si 10% sunt bolnave. => din imaginea totala, 18% sunt sanatoase, 9% sunt in declin si 4% sunt bolnave. calculeaza o2 ca mai jos. *ms copilot
+    # TODO: We have the health index(healthy%, declining%, unhealthy% and none%). Now we need to calculate the o2 emissions. One pixel is equal to ~200m^2
+    # *: 36% din toata imaginea sunt plante, din alea 36%, 50% sunt sanatoase, 25% sunt in declin si 10% sunt bolnave. => din imaginea totala, 18% sunt sanatoase, 9% sunt in declin si 4% sunt bolnlave si 63% e spatiu fara plante. calculeaza o2 ca mai jos. *ms copilot
     #o2 emissions may not be calculated correctly, this is just what copilot suggested
-    o2 = round((healthy * 0.5) + (declining * 0.25) + (unhealthy * 0.1))
+    ##o2 = round((healthy * 0.5) + (declining * 0.25) + (unhealthy * 0.1))
 
-    row = (image, str(healthy), str(declining), str(unhealthy), str(o2))
-    add_csv_data(data_file, row)
+    ##row = (image, str(healthy), str(declining), str(unhealthy), str(o2))
+    ##add_csv_data(data_file, row)
