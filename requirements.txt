@@ -2,4 +2,3 @@ opencv-python
 matplotlib
 scipy
 pillow
-pylab-sdk

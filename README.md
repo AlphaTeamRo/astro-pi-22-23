@@ -29,4 +29,9 @@ Needs python <3.10 as 3.11 does not support cv2
     cd ..
     ```
 
-3. Pixel count(must be run on Flight OS)
+3. Pixel count
+    ```
+    cd 3-pixelcount
+    python3 pixelcount.py
+    cd ..
+    ```
