@@ -9,7 +9,7 @@ import os
 base_folder = Path(__file__).parents[1]
 print("Working in: " + str(base_folder))
 # * Only analyze the day images
-img_folder = f'{base_folder}/images_masked/day'
+img_folder = f'{base_folder}/images_masked/'
 
 
 # Functions for creating and appending data in a CSV file
@@ -80,10 +80,14 @@ def pixelcount(img):
 data_file = f'{base_folder}/data.csv'
 create_csv(data_file)
 
+#create folder for plain images, first check if it already exists
+if not os.path.exists(f"{base_folder}/images_plain_colors/"):
+    os.makedirs(f"{base_folder}/images_plain_colors/")
+
 # Main loop
 for image in os.listdir(img_folder):
-    print(f"{base_folder}/images_masked/day/" + image)
-    counts = pixelcount(f"{base_folder}/images_masked/day/" + image)
+    print(img_folder + image)
+    counts = pixelcount(img_folder + image)
 
     green = counts["green"] + counts["lime"] + counts["limegreen"]
     yellow = counts["yellow"] + counts["orange"]
