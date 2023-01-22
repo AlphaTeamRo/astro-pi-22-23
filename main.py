@@ -53,8 +53,8 @@ project_start_time = datetime.now()
 
 base_folder = Path(__file__).parent.resolve()
 
-model_file = f'{base_folder}/model_v1/model_edgetpu.tflite' # name of model
-label_file = f'{base_folder}/model_v1/labels.txt' # Name of your label file
+model_file = f'{base_folder}/model_v2/model_edgetpu.tflite' # name of model
+label_file = f'{base_folder}/model_v2/labels.txt' # Name of your label file
 img_dir = f'{base_folder}/raw'
 data_file = f'{base_folder}/data.csv'
 position_file = f'{base_folder}/position.csv'
