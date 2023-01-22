@@ -35,3 +35,5 @@ Needs python <3.10 as 3.11 does not support cv2
     python3 pixelcount.py
     cd ..
     ```
+
+## That's it. All data should be in "data.csv"

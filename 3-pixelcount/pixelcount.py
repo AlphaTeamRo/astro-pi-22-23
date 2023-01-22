@@ -17,7 +17,7 @@ def create_csv(data_file):
     with open(data_file, 'w') as f:
         try:
             writer = csv.writer(f)
-            header = ("Image", "Healthy", "Declining", "Unhealthy", "O2 emissions")
+            header = ("Image", "Healthy%", "Declining%", "Unhealthy%", "No plants%", "O2 emissions (grams)", "CO2 removal (grams)")
             writer.writerow(header)
         except:
             print("Couldn't create a csv file")
@@ -102,14 +102,14 @@ for image in os.listdir(img_folder):
     #green = healthy
     #yellow = declining
     #red = unhealthy
-    healty_perc = round(green / total * 10000) / 100
+    healthy_perc = round(green / total * 10000) / 100
     declining_perc = round(yellow / total * 10000) / 100
-    unhealty_perc = round(red / total * 10000) / 100
+    unhealthy_perc = round(red / total * 10000) / 100
     none_perc = round(none / total * 10000) / 100
     #print
-    print("Healthy: " + str(healty_perc) + "%")
+    print("Healthy: " + str(healthy_perc) + "%")
     print("Declining: " + str(declining_perc) + "%")
-    print("Unhealthy: " + str(unhealty_perc) + "%")
+    print("Unhealthy: " + str(unhealthy_perc) + "%")
     print("None: " + str(none_perc) + "%")
     
 
@@ -118,5 +118,14 @@ for image in os.listdir(img_folder):
     #o2 emissions may not be calculated correctly, this is just what copilot suggested
     ##o2 = round((healthy * 0.5) + (declining * 0.25) + (unhealthy * 0.1))
 
-    ##row = (image, str(healthy), str(declining), str(unhealthy), str(o2))
-    ##add_csv_data(data_file, row)
+    # Given that one pixel is equal to ~200m^2, and 200m^2 of HEALTHY grass produces on average 0.031 g O2/day and removes 42 g CO2/day
+    # We can approximate the o2 emmisions/co2 removal of declining plants at 0.015 g O2/day and 21 g CO2/day (50%) and unhealthy plants at 0.005 g O2/day and 7 g CO2/day (10%)
+    # We can approximate the o2 emmisions/co2 removal of no plants at 0.000 g O2/day and 0 g CO2/day (0%)
+    # green = healthy, yellow = declining, red = unhealthy, none = no plants
+    #calculate the o2 emissions
+    o2 = round((green * 0.031) + (yellow * 0.015) + (red * 0.005) + (none * 0.000))
+    #calculate the co2 removal
+    co2 = round((green * 42) + (yellow * 21) + (red * 7) + (none * 0))
+
+    row = (image, str(healthy_perc), str(declining_perc), str(unhealthy_perc), str(none_perc), str(o2), str(co2))
+    add_csv_data(data_file, row)
