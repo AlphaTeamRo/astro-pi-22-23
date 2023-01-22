@@ -8,6 +8,7 @@ import os
 
 base_folder = Path(__file__).parents[1]
 print("Working in: " + str(base_folder))
+# * Only analyze the day images
 img_folder = f'{base_folder}/images_masked/day'
 
 
@@ -33,9 +34,10 @@ def add_csv_data(data_file, data):
 def pixelcount(img):
     #save the image(temporary, for testing)
     #cv2.imwrite('ndvi.png', img)
+    img_name = img.split("/")[-1]
     img = Image.open(img)
     #borrow a list of named colors from matplotlib
-    use_colors = {k: colors.cnames[k] for k in ['red', 'green', 'yellow', 'purple', 'gray', 'black', 'blue']}
+    use_colors = {k: colors.cnames[k] for k in ['red', 'green', 'lime', 'limegreen', 'yellow', 'orange', 'purple', 'gray', 'black', 'blue']}
 
     #translate hexstring to RGB tuple
     named_colors = {k: tuple(map(int, (v[1:3], v[3:5], v[5:7]), 3*(16,)))
@@ -70,7 +72,7 @@ def pixelcount(img):
 
     pylab.clf()
     pylab.imshow(color_tuples[idx])
-    pylab.savefig(f'{base_folder}/testtt.png')
+    pylab.savefig(f'{base_folder}/images_plain_colors/{img_name.split(".")[0]}.jpg')
     
 
     return counts
@@ -83,10 +85,13 @@ for image in os.listdir(img_folder):
     print(f"{base_folder}/images_masked/day/" + image)
     counts = pixelcount(f"{base_folder}/images_masked/day/" + image)
 
-    all_vegetation_px = counts["red"] + counts["green"] + counts["yellow"]
+    green = counts["green"] + counts["lime"] + counts["limegreen"]
+    yellow = counts["yellow"] + counts["orange"]
+
+    all_vegetation_px = counts["red"] + green + yellow
 
     # Calculate what % of the image is occupied by plants(no matter their health condition)
-    all_image_px = counts["red"] + counts["green"] + counts["yellow"] + counts["gray"] + counts["black"] #blue is the mask, it will be ignored
+    all_image_px = counts["red"] + green + yellow + counts["gray"] + counts["black"] #blue is the mask, it will be ignored
 
     # Calculate how much of the image is occupied by plants
     plant_px_percentage = round((all_vegetation_px / all_image_px) * 100)
@@ -97,8 +102,8 @@ for image in os.listdir(img_folder):
     #green = healthy
     #yellow = declining
     #red = unhealthy
-    healthy = round((counts["green"] / all_vegetation_px) * 100)
-    declining = round((counts["yellow"] / all_vegetation_px) * 100)
+    healthy = round((green / all_vegetation_px) * 100)
+    declining = round((yellow / all_vegetation_px) * 100)
     unhealthy = round((counts["red"] / all_vegetation_px) * 100)
 
     # TODO: We have the health index(healthy, declining, unhealthy) and the plant percentage(plant_px_percentage). Now we need to calculate the o2 emissions. One pixel is equal to ~200m^2
