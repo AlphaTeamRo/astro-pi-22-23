@@ -6,7 +6,7 @@ from pathlib import Path
 
 base_folder = Path(__file__).parents[1]
 print("Working in: " + str(base_folder))
-img_folder = f'{base_folder}/auto-classify'
+img_folder = f'{base_folder}/auto-classify/day'
 
 #temp function for displaying resulted images
 def display(image, image_name):
@@ -42,25 +42,28 @@ def calc_ndvi(image):
     ndvi = (b.astype(float) - r) / bottom
     return ndvi
 
+"""
 for dir in os.listdir(img_folder):
     #check if the file is a folder
     if "." not in str(dir):
         print("Processing: " + str(dir))
-        #create folder for ndvi images, first check if it already exists
-        if not os.path.exists(f"{base_folder}/images_ndvi/" + dir):
-            os.makedirs(f"{base_folder}/images_ndvi/" + dir)
-        #iterate through all images in the folder
-        for image_file in os.listdir(img_folder + "/" + dir):
-            image = cv2.imread(img_folder + "/" + dir + "/" + image_file)
-            ##print("Image file is: " + str(image_file))
-            contrasted = contrast_stretch(image)
-            #calculate ndvi
-            ndvi = calc_ndvi(contrasted)
-            #contrast ndvi again (might be temporary)
-            ndvi_contrasted = contrast_stretch(ndvi)
-            #add color mapping(could be removed later, if we work using shades of grey instead of colors)
-            color_mapped_prep = ndvi_contrasted.astype(np.uint8)
-            color_mapped_image = cv2.applyColorMap(color_mapped_prep, fastiecm)
-            img_path = f"{base_folder}/images_ndvi/" + dir + "/" + image_file
-            cv2.imwrite(img_path, color_mapped_image)
-            print("Converted: " + img_path)
+"""
+
+#create folder for ndvi images, first check if it already exists
+if not os.path.exists(f"{base_folder}/images_ndvi/"):
+    os.makedirs(f"{base_folder}/images_ndvi/")
+#iterate through all images in the folder
+for image_file in os.listdir(img_folder):
+    image = cv2.imread(img_folder + "/" + image_file)
+    ##print("Image file is: " + str(image_file))
+    contrasted = contrast_stretch(image)
+    #calculate ndvi
+    ndvi = calc_ndvi(contrasted)
+    #contrast ndvi again (might be temporary)
+    ndvi_contrasted = contrast_stretch(ndvi)
+    #add color mapping(could be removed later, if we work using shades of grey instead of colors)
+    color_mapped_prep = ndvi_contrasted.astype(np.uint8)
+    color_mapped_image = cv2.applyColorMap(color_mapped_prep, fastiecm)
+    img_path = f"{base_folder}/images_ndvi/" + image_file
+    cv2.imwrite(img_path, color_mapped_image)
+    print("Converted: " + img_path)
