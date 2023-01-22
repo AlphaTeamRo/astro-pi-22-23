@@ -14,7 +14,7 @@ img_folder = f'{base_folder}/images_masked/'
 
 # Functions for creating and appending data in a CSV file
 def create_csv(data_file):
-    with open(data_file, 'w') as f:
+    with open(data_file, 'w', newline='') as f:
         try:
             writer = csv.writer(f)
             header = ("Image", "Healthy%", "Declining%", "Unhealthy%", "No plants%", "O2 emissions (grams)", "CO2 removal (grams)")
@@ -23,7 +23,7 @@ def create_csv(data_file):
             print("Couldn't create a csv file")
 
 def add_csv_data(data_file, data):
-    with open(data_file, 'a') as f:
+    with open(data_file, 'a', newline='') as f:
         try:
             writer = csv.writer(f)
             writer.writerow(data)
