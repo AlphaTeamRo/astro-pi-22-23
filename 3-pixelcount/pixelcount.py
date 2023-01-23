@@ -5,6 +5,10 @@ import numpy as np
 import csv
 from pathlib import Path
 import os
+import time
+
+# Start runtime timer
+start_time = time.time()
 
 base_folder = Path(__file__).parents[1]
 print("Working in: " + str(base_folder))
@@ -133,3 +137,7 @@ for image in os.listdir(img_folder):
 
     row = (image, str(healthy_perc), str(declining_perc), str(unhealthy_perc), str(none_perc), str(o2), str(co2))
     add_csv_data(data_file, row)
+
+# Stop runtime timer and print the time it took to run the script
+end = time.time()
+print(f"Runtime of the program is {end - start_time}")
