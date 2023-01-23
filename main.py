@@ -151,7 +151,7 @@ night_c = 0
 tw_c = 0
 
 cam = PiCamera()
-cam.resolution = (1296,972)
+cam.resolution = (2592, 1944)
 
 cpu = CPUTemperature()
 sense = SenseHat()
