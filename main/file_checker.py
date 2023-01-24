@@ -39,3 +39,15 @@ def files_check(logger, base_folder):
             os.makedirs(f"{base_folder}/auto-classify")
         except:
             logger.error("There was no auto-classify dir and I couldn\'t make one")
+    
+    #check if auto-classify  subfolders exist
+    subfolders = ["day", "night", "twilight"]
+    for i in subfolders:
+        if os.path.exists(f"{base_folder}/auto-classify/{i}"):
+            pass
+        else:
+            os.makedirs(f"{base_folder}/auto-classify/{i}")
+            try:
+                logger.error(f"There was no auto-classify/{i} dir, so I made one")
+            except:
+                logger.error(f"There was no auto-classify/{i} dir and I couldn\'t make one")
