@@ -220,7 +220,7 @@ while (now_time < project_start_time + timedelta(minutes=170)):
 	# Log position data
 	pos_row = (str(orientation["yaw"]), str(orientation["pitch"]), str(orientation["roll"]), str(mag["x"]), str(mag["y"]), str(mag["z"]), str(acc["x"]), str(acc["y"]), str(acc["z"]), str(gyro["x"]), str(gyro["y"]), str(gyro["z"]), str(point.elevation.km))
 	add_csv_position(position_file, pos_row)
-	sleep(5)
+	sleep(15)
 
 	# add a line to the logfile so we can distinguish each run
 	logger.debug("--------------------------------------------------")
