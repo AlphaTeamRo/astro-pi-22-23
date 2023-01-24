@@ -23,7 +23,6 @@ Honorable mentions:
 """
 
 
-#TODO: Before submitting, remove auto-classify/purge.sh
 #TODO: See how much space each run takes, set the delay so we gather as much data as possible whilst also keeping it under 3 GB
 
 # This only classifies images into night/twilight/day, embeds the corresponding EXIF, and writes data to CSV files.
