@@ -23,7 +23,7 @@ def files_check(logger, base_folder):
     #check if auto-classify exists
     if os.path.exists(f"{base_folder}/auto-classify"):
         #check if subfolders exist
-        subfolders = ["day", "night", "twilight"]
+        subfolders = ["day", "twilight"]
         for i in subfolders:
             if os.path.exists(f"{base_folder}/auto-classify/{i}"):
                 pass
@@ -41,7 +41,7 @@ def files_check(logger, base_folder):
             logger.error("There was no auto-classify dir and I couldn\'t make one")
     
     #check if auto-classify  subfolders exist
-    subfolders = ["day", "night", "twilight"]
+    subfolders = ["day", "twilight"]
     for i in subfolders:
         if os.path.exists(f"{base_folder}/auto-classify/{i}"):
             pass

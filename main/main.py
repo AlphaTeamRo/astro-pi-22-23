@@ -25,7 +25,7 @@ Honorable mentions:
 
 #TODO: See how much space each run takes, set the delay so we gather as much data as possible whilst also keeping it under 3 GB
 
-# This only classifies images into night/twilight/day, embeds the corresponding EXIF, and writes data to CSV files.
+# This only classifies images into twilight/day, embeds the corresponding EXIF, and writes data to CSV files.
 # Our goal with this is to capture as much data as possible. We will process NDVI, O2 emissions, etc. back on Earth.
 
 import cv2
@@ -185,7 +185,7 @@ while (now_time < project_start_time + timedelta(minutes=170)):
 		# move the image to the appropriate folder and count its type
 		if cl == "night":
 			night_c = night_c+1
-			shutil.move(image_file, f"{base_folder}/auto-classify/night/")
+			os.remove(image_file)
 		elif cl == "day":
 			day_c = day_c+1
 			shutil.move(image_file, f"{base_folder}/auto-classify/day/")
