@@ -159,76 +159,98 @@ has_been_killed = True
 
 now_time = datetime.now()
 while (now_time < project_start_time + timedelta(minutes=170)):
-#for file in os.listdir(image_dir):
-	#timestamp format: yyyy-mm-dd_hh-mm-ss
-	timestamp = str(datetime.now())
-	timestamp = timestamp[0:19]
-	timestamp = re.sub(r'[:]', '-', re.sub(r'[ ]', '_', timestamp))
-
-	#-----------------TAKE CAMERA PICTURE AND STORE IT IN image-----------------#
-	image_file = f"{base_folder}/raw/{timestamp}.jpg"
-	#take the picture
-	point, latref, longref = capture(cam, image_file)
-
-	image = Image.open(image_file).convert('RGB').resize(size, Image.ANTIALIAS)
-
-	common.set_input(interpreter, image)
-	interpreter.invoke()
-	classes = classify.get_classes(interpreter, top_k=1)
-	
-	labels = read_label_file(label_file)
-	for c in classes:
-
-		cl = labels.get(c.id, c.id)
-		logger.info(f'{image_file} {labels.get(c.id, c.id)} {c.score:.5f}')
-		
-		# move the image to the appropriate folder and count its type
-		if cl == "night":
-			night_c = night_c+1
-			os.remove(image_file)
-		elif cl == "day":
-			day_c = day_c+1
-			shutil.move(image_file, f"{base_folder}/auto-classify/day/")
-		elif cl == "twilight":
-			tw_c = tw_c+1
-			shutil.move(image_file, f"{base_folder}/auto-classify/twilight/")
-	
-	# Log to data.csv and logfile
-	longitude = str(point.longitude).replace("deg", "°").replace("-", "") + longref
-	latitude = str(point.latitude).replace("deg", "°").replace("-", "") + latref
-
-	# log to logfile
-	logger.info("Longitude: " + longitude)
-	logger.info("Latitude: "  + latitude)
-
-	# Get environment data
-	iss_temp = sense.get_temperature()
-	iss_humidity = sense.get_humidity()
-	iss_pressure = sense.get_pressure()
-	type = cl
-
-	# write the csv row
-	row = (timestamp, str(type), str(longitude), str(latitude), str(iss_temp), str(cpu.temperature), str(iss_humidity), str(iss_pressure))
-	add_csv_data(data_file, row)
-
-	# Get position data
-	orientation = sense.get_orientation()
-	mag = sense.get_compass_raw()
-	acc = sense.get_accelerometer_raw()
-	gyro = sense.get_gyroscope_raw()
-
-	# Log position data
-	pos_row = (str(orientation["yaw"]), str(orientation["pitch"]), str(orientation["roll"]), str(mag["x"]), str(mag["y"]), str(mag["z"]), str(acc["x"]), str(acc["y"]), str(acc["z"]), str(gyro["x"]), str(gyro["y"]), str(gyro["z"]), str(point.elevation.km))
-	add_csv_position(position_file, pos_row)
-	sleep(15)
-
-	# add a line to the logfile so we can distinguish each run
-	logger.debug("--------------------------------------------------")
-
 	try:
-		now_time = datetime.now()
+	#for file in os.listdir(image_dir):
+		#timestamp format: yyyy-mm-dd_hh-mm-ss
+		timestamp = str(datetime.now())
+		timestamp = timestamp[0:19]
+		timestamp = re.sub(r'[:]', '-', re.sub(r'[ ]', '_', timestamp))
+
+		#-----------------TAKE CAMERA PICTURE AND STORE IT IN image-----------------#
+		image_file = f"{base_folder}/raw/{timestamp}.jpg"
+		#take the picture
+		point, latref, longref = capture(cam, image_file)
+
+		image = Image.open(image_file).convert('RGB').resize(size, Image.ANTIALIAS)
+
+		common.set_input(interpreter, image)
+		interpreter.invoke()
+		classes = classify.get_classes(interpreter, top_k=1)
+
+		labels = read_label_file(label_file)
+		for c in classes:
+
+			cl = labels.get(c.id, c.id)
+			logger.info(f'{image_file} {labels.get(c.id, c.id)} {c.score:.5f}')
+
+			# move the image to the appropriate folder and count its type
+			if cl == "night":
+				night_c = night_c+1
+				os.remove(image_file)
+			elif cl == "day":
+				day_c = day_c+1
+				shutil.move(image_file, f"{base_folder}/auto-classify/day/")
+			elif cl == "twilight":
+				tw_c = tw_c+1
+				shutil.move(image_file, f"{base_folder}/auto-classify/twilight/")
+
+		# Log to data.csv and logfile
+		try:
+			longitude = str(point.longitude).replace("deg", "°").replace("-", "") + longref
+			latitude = str(point.latitude).replace("deg", "°").replace("-", "") + latref
+		except:
+			logger.error("Failed to get position data (lat/long)")
+			longitude = "Failed"
+			latitude = "Failed"
+
+		# log to logfile
+		logger.info("Longitude: " + longitude)
+		logger.info("Latitude: "  + latitude)
+
+		# Get environment data
+		try:
+			iss_temp = sense.get_temperature()
+			iss_humidity = sense.get_humidity()
+			iss_pressure = sense.get_pressure()
+			type = cl
+		except:
+			logger.error("Failed to get environmental data")
+
+		# write the csv row
+		try:
+			row = (timestamp, str(type), str(longitude), str(latitude), str(iss_temp), str(cpu.temperature), str(iss_humidity), str(iss_pressure))
+			add_csv_data(data_file, row)
+		except:
+			logger.error("Failed to write to data.csv")
+
+		# Get position data
+		try:
+			orientation = sense.get_orientation()
+			mag = sense.get_compass_raw()
+			acc = sense.get_accelerometer_raw()
+			gyro = sense.get_gyroscope_raw()
+		except:
+			logger.error("Failed to get position data (orientation)")
+
+		# Log position data
+		try:
+			pos_row = (str(orientation["yaw"]), str(orientation["pitch"]), str(orientation["roll"]), str(mag["x"]), str(mag["y"]), str(mag["z"]), str(acc["x"]), str(acc["y"]), str(acc["z"]), str(gyro["x"]), str(gyro["y"]), str(gyro["z"]), str(point.elevation.km))
+			add_csv_position(position_file, pos_row)
+		except:
+			logger.error("Failed to write to position.csv")
+		sleep(15)
+
+		# add a line to the logfile so we can distinguish each run
+		logger.debug("--------------------------------------------------")
+
+		try:
+			now_time = datetime.now()
+		except:
+			logger.error("Couldn't update the time")
+	except Exception as e:
+		logger.error(f'Error in main loop: {e.__class__.__name__}: {e})')
 	except:
-		logger.error("Couldn't update the time")
+		logger.error("General error in main loop")
 
 logger.debug("Day: " + str(day_c))
 logger.debug("Night: " + str(night_c))
