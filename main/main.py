@@ -248,15 +248,19 @@ while (now_time < project_start_time + timedelta(minutes=170)):
 		# add a line to the logfile so we can distinguish each run
 		logger.debug("--------------------------------------------------")
 
-		#check if the photo size is bigger than 2.5GB
-		if photo_size > 2500000000:
-			logger.info("Photo size is bigger than 2.5GB, stopping the program")
+		#check if the photo size is bigger than 2.7GB
+		if photo_size > 2700000000:
+			logger.info("Photo size is bigger than 2.7GB, stopping the program")
 			break
 
 		try:
 			now_time = datetime.now()
 		except:
 			logger.error("Couldn't update the time")
+	#keyboard interrupt for testing
+	except KeyboardInterrupt:
+		logger.error("Keyboard interrupt")
+		break
 	except Exception as e:
 		logger.error(f'Error in main loop: {e.__class__.__name__}: {e})')
 	except:

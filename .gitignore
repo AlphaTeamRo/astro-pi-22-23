@@ -7,3 +7,5 @@ auto-classify/day/*
 auto-classify/night/*
 auto-classify/twilight/*
 position.csv
+main/auto-classify
+main/raw
