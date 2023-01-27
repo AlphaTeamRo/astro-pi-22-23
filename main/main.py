@@ -157,6 +157,8 @@ sense = SenseHat()
 
 has_been_killed = True
 
+photo_size = 0
+
 now_time = datetime.now()
 while (now_time < project_start_time + timedelta(minutes=170)):
 	try:
@@ -170,6 +172,9 @@ while (now_time < project_start_time + timedelta(minutes=170)):
 		image_file = f"{base_folder}/raw/{timestamp}.jpg"
 		#take the picture
 		point, latref, longref = capture(cam, image_file)
+
+		#add the image size to photo_size (bytes)
+		photo_size = photo_size + os.path.getsize(image_file)
 
 		image = Image.open(image_file).convert('RGB').resize(size, Image.ANTIALIAS)
 
@@ -242,6 +247,11 @@ while (now_time < project_start_time + timedelta(minutes=170)):
 
 		# add a line to the logfile so we can distinguish each run
 		logger.debug("--------------------------------------------------")
+
+		#check if the photo size is bigger than 2.5GB
+		if photo_size > 2500000000:
+			logger.info("Photo size is bigger than 2.5GB, stopping the program")
+			break
 
 		try:
 			now_time = datetime.now()
