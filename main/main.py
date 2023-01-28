@@ -173,9 +173,6 @@ while (now_time < project_start_time + timedelta(minutes=170)):
 		#take the picture
 		point, latref, longref = capture(cam, image_file)
 
-		#add the image size to photo_size (bytes)
-		photo_size = photo_size + os.path.getsize(image_file)
-
 		image = Image.open(image_file).convert('RGB').resize(size, Image.ANTIALIAS)
 
 		common.set_input(interpreter, image)
@@ -194,9 +191,19 @@ while (now_time < project_start_time + timedelta(minutes=170)):
 				os.remove(image_file)
 			elif cl == "day":
 				day_c = day_c+1
+				#add the image size to photo_size (bytes)
+				try:
+					photo_size = photo_size + os.path.getsize(image_file)
+				except:
+					logger.error("Could not update photo size.")
 				shutil.move(image_file, f"{base_folder}/auto-classify/day/")
 			elif cl == "twilight":
 				tw_c = tw_c+1
+				#add the image size to photo_size (bytes)
+				try:
+					photo_size = photo_size + os.path.getsize(image_file)
+				except:
+					logger.error("Could not update photo size.")
 				shutil.move(image_file, f"{base_folder}/auto-classify/twilight/")
 
 		# Log to data.csv and logfile
