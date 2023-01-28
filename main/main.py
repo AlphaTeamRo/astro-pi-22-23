@@ -22,9 +22,6 @@ Honorable mentions:
 ------------------------------------------------------------------------------------------------------------------
 """
 
-
-#TODO: See how much space each run takes, set the delay so we gather as much data as possible whilst also keeping it under 3 GB
-
 # This only classifies images into twilight/day, embeds the corresponding EXIF, and writes data to CSV files.
 # Our goal with this is to capture as much data as possible. We will process NDVI, O2 emissions, etc. back on Earth.
 
@@ -44,7 +41,7 @@ import csv
 from orbit import ISS
 from file_checker import files_check
 from gpiozero import CPUTemperature
-from sense_hat import SenseHat # ! CHANGE sense_emu TO sense_hat BEFORE SUBMITTING
+from sense_hat import SenseHat
 import re
 from time import sleep
 
@@ -162,7 +159,6 @@ photo_size = 0
 now_time = datetime.now()
 while (now_time < project_start_time + timedelta(minutes=170)):
 	try:
-	#for file in os.listdir(image_dir):
 		#timestamp format: yyyy-mm-dd_hh-mm-ss
 		timestamp = str(datetime.now())
 		timestamp = timestamp[0:19]
