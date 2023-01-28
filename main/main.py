@@ -269,5 +269,6 @@ while (now_time < project_start_time + timedelta(minutes=170)):
 logger.debug("Day: " + str(day_c))
 logger.debug("Night: " + str(night_c))
 logger.debug("Twilight: " + str(tw_c))
+logger.debug("Photo size (Bytes):" + str(photo_size))
 has_been_killed = False
 logger.debug("Has been killed: " + str(has_been_killed))
