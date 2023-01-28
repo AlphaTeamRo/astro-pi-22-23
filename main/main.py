@@ -243,7 +243,7 @@ while (now_time < project_start_time + timedelta(minutes=170)):
 			add_csv_position(position_file, pos_row)
 		except:
 			logger.error("Failed to write to position.csv")
-		sleep(15)
+		sleep(10)
 
 		# add a line to the logfile so we can distinguish each run
 		logger.debug("--------------------------------------------------")
