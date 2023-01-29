@@ -45,10 +45,12 @@ from sense_hat import SenseHat
 import re
 from time import sleep
 
+#start project timer
 project_start_time = datetime.now()
 
 base_folder = Path(__file__).parent.resolve()
 
+#load model and csv paths
 model_file = f'{base_folder}/model_v2/model_edgetpu.tflite' # name of model
 label_file = f'{base_folder}/model_v2/labels.txt' # Name of your label file
 img_dir = f'{base_folder}/raw'
@@ -126,22 +128,28 @@ def capture(camera, image):
 
 	return point, latref, longref
 
+#make tensorflow interpreter
 interpreter = make_interpreter(f"{model_file}")
 interpreter.allocate_tensors()
 
 size = common.input_size(interpreter)
 
+#create csv files
 create_csv(data_file)
 create_position_file(position_file)
+#start logger
 logfile(f'{base_folder}/events.log')
 logger.debug("Hello from Romania !")
+#run the file checker (file_checker.py)
 files_check(logger, base_folder)
 
+#log file location(debugging)
 try:
 	logger.info(f"I run in {str(base_folder)}")
 except:
 	logger.error("Couldn\'t log the file location")
 
+#initialize day/night/twilight counters
 day_c = 0
 night_c = 0
 tw_c = 0
@@ -154,6 +162,7 @@ sense = SenseHat()
 
 has_been_killed = True
 
+#initialize photo size (used to stop the program if it ever reaches 2.7GB)
 photo_size = 0
 
 now_time = datetime.now()
@@ -171,6 +180,7 @@ while (now_time < project_start_time + timedelta(minutes=170)):
 
 		image = Image.open(image_file).convert('RGB').resize(size, Image.ANTIALIAS)
 
+		#classify the image
 		common.set_input(interpreter, image)
 		interpreter.invoke()
 		classes = classify.get_classes(interpreter, top_k=1)
@@ -184,6 +194,7 @@ while (now_time < project_start_time + timedelta(minutes=170)):
 			# move the image to the appropriate folder and count its type
 			if cl == "night":
 				night_c = night_c+1
+				#removing night images to save space
 				os.remove(image_file)
 			elif cl == "day":
 				day_c = day_c+1
@@ -240,7 +251,7 @@ while (now_time < project_start_time + timedelta(minutes=170)):
 		except:
 			logger.error("Failed to get position data (orientation)")
 
-		# Log position data
+		# Log position data to csv
 		try:
 			pos_row = (str(orientation["yaw"]), str(orientation["pitch"]), str(orientation["roll"]), str(mag["x"]), str(mag["y"]), str(mag["z"]), str(acc["x"]), str(acc["y"]), str(acc["z"]), str(gyro["x"]), str(gyro["y"]), str(gyro["z"]), str(point.elevation.km))
 			add_csv_position(position_file, pos_row)
@@ -255,7 +266,8 @@ while (now_time < project_start_time + timedelta(minutes=170)):
 		if photo_size > 2700000000:
 			logger.info("Photo size is bigger than 2.7GB, stopping the program")
 			break
-
+		
+		#update the timer
 		try:
 			now_time = datetime.now()
 		except:
@@ -269,6 +281,7 @@ while (now_time < project_start_time + timedelta(minutes=170)):
 	except:
 		logger.error("General error in main loop")
 
+#log finishing stuff
 logger.debug("Day: " + str(day_c))
 logger.debug("Night: " + str(night_c))
 logger.debug("Twilight: " + str(tw_c))

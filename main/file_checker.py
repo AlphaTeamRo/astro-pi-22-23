@@ -35,6 +35,7 @@ def files_check(logger, base_folder):
                     logger.error(f"There was no auto-classify/{i} dir and I couldn\'t make one")
     else:
         try:
+            #create directory if it doesn't exist
             logger.error("There was no auto-classify dir, so I made one")
             os.makedirs(f"{base_folder}/auto-classify")
         except:
