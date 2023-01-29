@@ -1,5 +1,8 @@
 import os
 
+#required folders: raw, auto-classify, auto-classify/day, auto-classify/twilight
+#required files: events.log
+
 def files_check(logger, base_folder):
     #check if all the files are present
     if os.path.exists(f"{base_folder}/raw"):
